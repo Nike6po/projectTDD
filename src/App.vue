@@ -46,7 +46,7 @@
     </v-app-bar>
 
     <v-main>
-      <!-- Здесь будет основной контент -->
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>

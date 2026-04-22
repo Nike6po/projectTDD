@@ -6,28 +6,32 @@ export default {
         desc: "First Desc",
         promo: true,
         src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-        id: "1"
+        id: "1",
+        userId: "1"
       },
       {
         title: "Second",
         desc: "Second Desc",
         promo: true,
         src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-        id: "2"
+        id: "2",
+        userId: "1"
       },
       {
         title: "Third",
         desc: "Third Desc",
         promo: true,
         src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-        id: "3"
+        id: "3",
+        userId: "2"
       },
       {
         title: "Fourth",
         desc: "Fourth Desc",
         promo: true,
         src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        id: "4"
+        id: "4",
+        userId: "2"
       }
     ]
   },
@@ -37,9 +41,31 @@ export default {
     }
   },
   actions: {
-    createAd({ commit }, payload) {
+    async createAd({ commit, getters }, payload) {
       payload.id = Math.random()
-      commit('createAd', payload)
+      payload.userId = getters.user != null ? getters.user.id : '1'
+      
+      commit('clearError', null, { root: true })
+      commit('setLoading', true, { root: true })
+      
+      // Имитация запроса к серверу
+      let isRequestOk = true
+      let promise = new Promise((resolve) => {
+        setTimeout(() => resolve('Done'), 2000)
+      })
+      
+      if (isRequestOk) {
+        await promise.then(() => {
+          commit('createAd', payload)
+          commit('setLoading', false, { root: true })
+        })
+      } else {
+        await promise.then(() => {
+          commit('setLoading', false, { root: true })
+          commit('setError', 'Ошибка создания объявления', { root: true })
+          throw new Error('Упс... Ошибка создания объявления')
+        })
+      }
     }
   },
   getters: {
@@ -49,8 +75,9 @@ export default {
     promoAds(state) {
       return state.ads.filter(ad => ad.promo)
     },
-    myAds(state) {
-      return state.ads
+    myAds(state, getters) {
+      if (!getters.user) return []
+      return state.ads.filter(ad => ad.userId == getters.user.id)
     },
     adById(state) {
       return (id) => {

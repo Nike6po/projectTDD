@@ -1,19 +1,47 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" sm="6" md="4" lg="3" v-for="ad in myAds" :key="ad.id">
-        <v-card class="elevation-10 mb-5">
-          <v-img :src="ad.src" height="200px"></v-img>
-          <v-card-title>
-            <h3>{{ ad.title }}</h3>
-          </v-card-title>
-          <v-card-text>
-            <p>{{ ad.desc }}</p>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text :to="'/ad/' + ad.id">Open</v-btn>
-          </v-card-actions>
+    <v-row justify="center">
+      <v-col cols="12" sm="8" lg="6">
+        <h1 class="text--secondary mb-3 mt-3">My ads</h1>
+        
+        <v-card 
+          v-for="ad in myAds" 
+          :key="ad.id" 
+          class="mb-3" 
+          max-width="1000"
+        >
+          <v-row>
+            <v-col cols="4">
+              <v-img 
+                :src="ad.src" 
+                height="175px" 
+                cover
+              ></v-img>
+            </v-col>
+            <v-col cols="8">
+              <h2 class="text--primary">{{ ad.title }}</h2>
+              <p style="height: 85px; overflow: hidden; text-overflow: ellipsis;">
+                {{ ad.desc }}
+              </p>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn 
+                  color="primary" 
+                  variant="text" 
+                  :to="'/ad/' + ad.id"
+                >
+                  Open
+                </v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
+        </v-card>
+        
+        <!-- Сообщение, если нет объявлений -->
+        <v-card v-if="myAds.length === 0" class="text-center pa-5">
+          <h3 class="text--secondary">No ads yet</h3>
+          <p>Create your first ad!</p>
+          <v-btn color="primary" to="/new">Create Ad</v-btn>
         </v-card>
       </v-col>
     </v-row>

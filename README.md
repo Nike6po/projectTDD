@@ -1,4 +1,4 @@
-# ad_project_2026
+# tdd_project_2026
 
 ## Project setup
 ```

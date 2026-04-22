@@ -69,6 +69,11 @@ export default {
       return this.$store.getters.error
     }
   },
+  mounted() {
+    if (this.$route.query.loginError === 'true') {
+      this.$store.dispatch('setError', 'Please login to access this page')
+    }
+  },
   methods: {
     onSubmit() {
       if (this.$refs.form.validate()) {

@@ -30,6 +30,12 @@
 
     <v-app-bar app dark color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      
+      <!-- Ссылка на главную страницу (добавлено в пункте 5.1) -->
+      <v-toolbar-title>
+        <v-btn to="/">Home</v-btn>
+      </v-toolbar-title>
+      
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn

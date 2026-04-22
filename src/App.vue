@@ -31,7 +31,6 @@
     <v-app-bar app dark color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       
-      <!-- Ссылка на главную страницу (добавлено в пункте 5.1) -->
       <v-toolbar-title>
         <v-btn to="/">Home</v-btn>
       </v-toolbar-title>
@@ -56,6 +55,24 @@
     <v-main>
       <router-view></router-view>
     </v-main>
+
+    <!-- Снекбар для отображения ошибок -->
+    <v-snackbar
+      v-model="error"
+      multi-line
+      :timeout="3000"
+      color="error"
+    >
+      {{ error }}
+      <template v-slot:actions>
+        <v-btn
+          variant="text"
+          @click="closeError"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -71,6 +88,16 @@ export default {
         { title: "New ad", icon: "mdi-note-plus-outline", url: "/new" },
         { title: "My ads", icon: "mdi-view-list-outline", url: "/list" }
       ]
+    }
+  },
+  computed: {
+    error() {
+      return this.$store.getters.error
+    }
+  },
+  methods: {
+    closeError() {
+      this.$store.dispatch('clearError')
     }
   }
 }

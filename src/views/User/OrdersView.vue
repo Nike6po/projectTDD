@@ -2,21 +2,21 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" sm="8" lg="6">
-        <h1 class="text--secondary mb-3 mt-3">Orders</h1>
+        <h1 class="text--secondary mb-3 mt-3">Мои заказы</h1>
       </v-col>
     </v-row>
 
     <v-row justify="center">
       <v-col cols="12" sm="8" lg="6">
-        <v-list subheader two-line flat>
+        <v-list v-if="userOrders.length > 0" subheader two-line flat>
           <v-list-item 
-            v-for="order in orders" 
+            v-for="order in userOrders" 
             :key="order.id"
           >
             <template v-slot:prepend>
               <v-list-item-action>
                 <v-checkbox
-                  :input-value="order.done"
+                  :model-value="order.done"
                   color="primary"
                   @click="markDone(order)"
                 ></v-checkbox>
@@ -28,11 +28,18 @@
 
             <template v-slot:append>
               <v-list-item-action>
-                <v-btn class="primary" :to="'/ad/' + order.adId">Open</v-btn>
+                <v-btn class="primary" :to="'/ad/' + order.adId">Открыть объявление</v-btn>
               </v-list-item-action>
             </template>
           </v-list-item>
         </v-list>
+        
+        <!-- Сообщение, если нет заказов -->
+        <v-card v-else class="text-center pa-5">
+          <h3 class="text--secondary">У вас пока нет заказов</h3>
+          <p>Купите что-нибудь!</p>
+          <v-btn color="primary" to="/">На главную</v-btn>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -40,37 +47,15 @@
 
 <script>
 export default {
-  data() {
-    return {
-      orders: [
-        {
-          id: "123",
-          name: "Kostya",
-          phone: "+7(978)000-00-05",
-          adId: "1",
-          done: true
-        },
-        {
-          id: "456",
-          name: "Anna",
-          phone: "+7(978)000-00-12",
-          adId: "2",
-          done: false
-        },
-        {
-          id: "789",
-          name: "Mike",
-          phone: "+7(978)000-00-34",
-          adId: "3",
-          done: false
-        }
-      ]
+  computed: {
+    userOrders() {
+      return this.$store.getters.userOrders || []
     }
   },
   methods: {
     markDone(order) {
-      order.done = !order.done;
-      console.log(order.done);
+      order.done = !order.done
+      console.log('Заказ обработан:', order.id, order.done)
     }
   }
 }

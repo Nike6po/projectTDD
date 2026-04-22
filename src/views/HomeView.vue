@@ -1,12 +1,12 @@
 <template>
   <div>
-    <!-- Карусель (5.2, 5.4) -->
+    <!-- Карусель (только promo объявления) -->
     <v-container fluid>
       <v-layout row>
         <v-flex xs12>
           <v-carousel>
             <v-carousel-item
-              v-for="ad in ads"
+              v-for="ad in promoAds"
               :key="ad.id"
               :src="ad.src"
             >
@@ -21,7 +21,7 @@
       </v-layout>
     </v-container>
 
-    <!-- Grid с карточками (5.2, 5.5) -->
+    <!-- Grid с карточками (все объявления) -->
     <v-container grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 sm6 md4
@@ -53,38 +53,12 @@
 
 <script>
 export default {
-  data() {
-    return {
-      ads: [
-        {
-          title: "First",
-          desc: "First Desc",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-          id: "1"
-        },
-        {
-          title: "Second",
-          desc: "Second Desc",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-          id: "2"
-        },
-        {
-          title: "Third",
-          desc: "Third Desc",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-          id: "3"
-        },
-        {
-          title: "Fourth",
-          desc: "Fourth Desc",
-          promo: true,
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-          id: "4"
-        }
-      ]
+  computed: {
+    promoAds() {
+      return this.$store.getters.promoAds
+    },
+    ads() {
+      return this.$store.getters.ads
     }
   }
 }

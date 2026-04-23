@@ -8,9 +8,9 @@
 
     <v-row justify="center">
       <v-col cols="12" sm="8" lg="6">
-        <v-list v-if="userOrders.length > 0" subheader two-line flat>
+        <v-list v-if="orders.length > 0" subheader two-line flat>
           <v-list-item 
-            v-for="order in userOrders" 
+            v-for="order in orders" 
             :key="order.id"
           >
             <template v-slot:prepend>
@@ -48,8 +48,8 @@
 <script>
 export default {
   computed: {
-    userOrders() {
-      return this.$store.getters.userOrders || []
+    orders() {
+      return this.$store.getters.orders || []
     }
   },
   methods: {

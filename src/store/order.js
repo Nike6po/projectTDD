@@ -1,3 +1,14 @@
+class Order {
+  constructor(name, phone, adId, userId, done = false, id = null) {
+    this.name = name
+    this.phone = phone
+    this.adId = adId
+    this.userId = userId
+    this.done = done
+    this.id = id || Math.random()
+  }
+}
+
 export default {
   state: {
     orders: []
@@ -12,8 +23,10 @@ export default {
   },
   actions: {
     async createOrder({ commit }, { name, phone, adId, userId }) {
-      console.log('Order details:', { name, phone, adId, userId })
+      const payload = new Order(name, phone, adId, userId, false, Math.random())
+      
       commit('clearError', null, { root: true })
+      commit('setLoading', true, { root: true })
       
       // Имитация запроса к серверу
       let isRequestOk = true
@@ -23,18 +36,12 @@ export default {
       
       if (isRequestOk) {
         await promise.then(() => {
-          const newOrder = {
-            id: Math.random(),
-            name: name,
-            phone: phone,
-            adId: adId,
-            userId: userId,
-            done: false
-          }
-          commit('createOrder', newOrder)
+          commit('createOrder', payload)
+          commit('setLoading', false, { root: true })
         })
       } else {
         await promise.then(() => {
+          commit('setLoading', false, { root: true })
           commit('setError', 'Ошибка создания заказа', { root: true })
           throw new Error('Упс... Ошибка создания заказа')
         })
@@ -42,11 +49,8 @@ export default {
     }
   },
   getters: {
-    orders(state) {
-      return state.orders
-    },
-    userOrders(state, getters) {
-      if (!getters.user) return []
+    orders(state, getters) {
+      if (getters.user == null) return []
       return state.orders.filter(order => order.userId == getters.user.id)
     }
   }
